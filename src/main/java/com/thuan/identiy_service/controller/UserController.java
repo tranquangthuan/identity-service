@@ -4,7 +4,9 @@ import com.thuan.identiy_service.dto.request.UserCreationRequest;
 import com.thuan.identiy_service.dto.request.UserUpdateRequest;
 import com.thuan.identiy_service.entity.User;
 import com.thuan.identiy_service.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -24,7 +27,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User create(@RequestBody UserCreationRequest request) {
+    public User create(@RequestBody @Valid UserCreationRequest request) {
         return userService.create(request);
     }
 
@@ -48,4 +51,6 @@ public class UserController {
         userService.deleteUser(userId);
         return "user deleted";
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.thuan.identiy_service.dto.request;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +13,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCreationRequest {
+
+    @Size(min = 8, message = "{username.min}")
     String username;
-    String password;
+
+    @Size(min = 8, message = "{password.min}")
+    private String password;
     String firstName;
     String lastName;
     LocalDate dob;
