@@ -1,0 +1,6 @@
+password:
+  min:  Yml password abc aaaa aaa
+username:
+  min: Yml Username xyz aaa111
+greeting:
+  message: Yml Hello
