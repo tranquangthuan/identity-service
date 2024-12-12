@@ -1,12 +1,12 @@
 package com.thuan.identiy_service.controller;
 
+import com.thuan.identiy_service.dto.request.ApiResponse;
 import com.thuan.identiy_service.dto.request.UserCreationRequest;
 import com.thuan.identiy_service.dto.request.UserUpdateRequest;
-import com.thuan.identiy_service.entity.User;
+import com.thuan.identiy_service.dto.response.UserResponse;
 import com.thuan.identiy_service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -27,22 +26,24 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User create(@RequestBody @Valid UserCreationRequest request) {
-        return userService.create(request);
+    public ApiResponse<UserResponse> create(@RequestBody @Valid UserCreationRequest request) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.create(request));
+        return apiResponse;
     }
 
     @GetMapping
-    public List<User> getAll() {
+    public List<UserResponse> getAll() {
         return userService.getAllUser();
     }
 
     @GetMapping("/{userId}")
-    public User getUser(@PathVariable(name = "userId") String userId) {
+    public UserResponse getUser(@PathVariable(name = "userId") String userId) {
         return userService.getUser(userId);
     }
 
     @PutMapping("/{userId}")
-    public User updateUser(@PathVariable(name = "userId") String userId, @RequestBody UserUpdateRequest request) {
+    public UserResponse updateUser(@PathVariable(name = "userId") String userId, @RequestBody UserUpdateRequest request) {
         return userService.updateUser(userId, request);
     }
 

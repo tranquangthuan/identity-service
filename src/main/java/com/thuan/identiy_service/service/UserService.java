@@ -2,49 +2,46 @@ package com.thuan.identiy_service.service;
 
 import com.thuan.identiy_service.dto.request.UserCreationRequest;
 import com.thuan.identiy_service.dto.request.UserUpdateRequest;
+import com.thuan.identiy_service.dto.response.UserResponse;
 import com.thuan.identiy_service.entity.User;
+import com.thuan.identiy_service.exception.AppException;
+import com.thuan.identiy_service.exception.ErrorCode;
+import com.thuan.identiy_service.mapper.UserMapper;
 import com.thuan.identiy_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserMapper userMapper;
 
-    public User create(UserCreationRequest request) {
-        if(userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("user existed");
+    public UserResponse create(UserCreationRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
-        User user = new User().builder()
-                .username(request.getUsername())
-                .password(request.getPassword())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .dob(request.getDob())
-                .build();
-
-        return userRepository.save(user);
+        User user = userMapper.toUser(request);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public User updateUser(String userId, UserUpdateRequest request) {
-        User user = getUser(userId);
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setPassword(request.getLastName());
-        user.setDob(request.getDob());
+    public UserResponse updateUser(String userId, UserUpdateRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        userMapper.updateUser(user, request);
 
-        return userRepository.save(user);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public List<User> getAllUser() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUser() {
+        return userRepository.findAll().stream().map(user -> userMapper.toUserResponse(user)).collect(Collectors.toList());
     }
 
-    public User getUser(String userId){
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not exist"));
+    public UserResponse getUser(String userId) {
+        return userMapper.toUserResponse(userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
 
     public void deleteUser(String userId) {
