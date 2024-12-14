@@ -6,7 +6,10 @@ import com.thuan.identiy_service.dto.request.UserUpdateRequest;
 import com.thuan.identiy_service.dto.response.UserResponse;
 import com.thuan.identiy_service.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -34,6 +38,9 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> getAll() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info(authentication.getName());
+        authentication.getAuthorities().forEach(r -> log.info(r.getAuthority()));
         return userService.getAllUser();
     }
 

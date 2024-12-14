@@ -4,6 +4,7 @@ import com.thuan.identiy_service.dto.request.UserCreationRequest;
 import com.thuan.identiy_service.dto.request.UserUpdateRequest;
 import com.thuan.identiy_service.dto.response.UserResponse;
 import com.thuan.identiy_service.entity.User;
+import com.thuan.identiy_service.enums.Role;
 import com.thuan.identiy_service.exception.AppException;
 import com.thuan.identiy_service.exception.ErrorCode;
 import com.thuan.identiy_service.mapper.UserMapper;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +33,8 @@ public class UserService {
         }
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        Set<String> roles = Set.of(Role.USER.name());
+        user.setRoles(roles);
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
