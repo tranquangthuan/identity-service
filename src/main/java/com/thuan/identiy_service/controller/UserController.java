@@ -1,6 +1,6 @@
 package com.thuan.identiy_service.controller;
 
-import com.thuan.identiy_service.dto.request.ApiResponse;
+import com.thuan.identiy_service.dto.response.ApiResponse;
 import com.thuan.identiy_service.dto.request.UserCreationRequest;
 import com.thuan.identiy_service.dto.request.UserUpdateRequest;
 import com.thuan.identiy_service.dto.response.UserResponse;
@@ -8,7 +8,6 @@ import com.thuan.identiy_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,5 +57,10 @@ public class UserController {
     public String deleteUser(@PathVariable(name = "userId") String userId) {
         userService.deleteUser(userId);
         return "user deleted";
+    }
+
+    @GetMapping("/myinfo")
+    public ApiResponse<UserResponse> myInfo() {
+        return ApiResponse.<UserResponse>builder().result(userService.myInfo()).build();
     }
 }

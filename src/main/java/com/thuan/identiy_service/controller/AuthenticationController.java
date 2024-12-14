@@ -1,7 +1,7 @@
 package com.thuan.identiy_service.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.thuan.identiy_service.dto.request.ApiResponse;
+import com.thuan.identiy_service.dto.response.ApiResponse;
 import com.thuan.identiy_service.dto.request.AuthenticationRequest;
 import com.thuan.identiy_service.dto.request.IntrospectRequest;
 import com.thuan.identiy_service.dto.response.AuthenticationResponse;

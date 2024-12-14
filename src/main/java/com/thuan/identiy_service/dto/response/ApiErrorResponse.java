@@ -1,4 +1,4 @@
-package com.thuan.identiy_service.dto.request;
+package com.thuan.identiy_service.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;

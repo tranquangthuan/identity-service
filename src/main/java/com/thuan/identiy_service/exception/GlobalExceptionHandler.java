@@ -1,6 +1,6 @@
 package com.thuan.identiy_service.exception;
 
-import com.thuan.identiy_service.dto.request.ApiErrorResponse;
+import com.thuan.identiy_service.dto.response.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
