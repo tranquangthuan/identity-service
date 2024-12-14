@@ -2,7 +2,9 @@ package com.thuan.identiy_service.exception;
 
 import com.thuan.identiy_service.dto.response.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,9 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> handleRunTimeException(RuntimeException exception, HttpServletRequest request) {
+        exception.printStackTrace();
         ErrorCode errorCode = ErrorCode.UN_HANDLE_EXCEPTION;
         List<ApiErrorResponse.FieldError> errors = new ArrayList<>(List.of(new ApiErrorResponse.FieldError(errorCode.getMessage())));
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(400, errors, request.getRequestURI());
@@ -25,8 +29,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleAppException(AppException exception, HttpServletRequest request) {
         ErrorCode errorCode = exception.getErrorCode();
         List<ApiErrorResponse.FieldError> errors = new ArrayList<>(List.of(new ApiErrorResponse.FieldError(errorCode.getMessage())));
-        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(400, errors, request.getRequestURI());
-        return ResponseEntity.badRequest().body(apiErrorResponse);
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(errorCode.getHttpStatusCode().value(), errors, request.getRequestURI());
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(apiErrorResponse);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -37,5 +41,14 @@ public class GlobalExceptionHandler {
 
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(400, errors, request.getRequestURI());
         return ResponseEntity.badRequest().body(apiErrorResponse);
+    }
+
+    @ExceptionHandler(value = AuthorizationDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException exception, HttpServletRequest request) {
+        log.error("handleAuthorizationDeniedException");
+        ErrorCode errorCode = ErrorCode.FORBIDEN_EXCEPTION;
+        List<ApiErrorResponse.FieldError> errors = new ArrayList<>(List.of(new ApiErrorResponse.FieldError(errorCode.getMessage())));
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(errorCode.getHttpStatusCode().value(), errors, request.getRequestURI());
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(apiErrorResponse);
     }
 }

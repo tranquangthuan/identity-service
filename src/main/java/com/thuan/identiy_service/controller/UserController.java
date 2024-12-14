@@ -1,13 +1,14 @@
 package com.thuan.identiy_service.controller;
 
-import com.thuan.identiy_service.dto.response.ApiResponse;
 import com.thuan.identiy_service.dto.request.UserCreationRequest;
 import com.thuan.identiy_service.dto.request.UserUpdateRequest;
+import com.thuan.identiy_service.dto.response.ApiResponse;
 import com.thuan.identiy_service.dto.response.UserResponse;
 import com.thuan.identiy_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class UserController {
     }
 
     @GetMapping
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAll() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info(authentication.getName());
