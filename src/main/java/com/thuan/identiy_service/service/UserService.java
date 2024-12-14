@@ -9,6 +9,7 @@ import com.thuan.identiy_service.exception.ErrorCode;
 import com.thuan.identiy_service.mapper.UserMapper;
 import com.thuan.identiy_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,11 +22,15 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public UserResponse create(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
     }
 

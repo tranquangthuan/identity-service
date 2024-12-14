@@ -1,6 +1,5 @@
 package com.thuan.identiy_service.controller;
 
-import com.thuan.identiy_service.dto.request.UserCreationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,6 @@ public class GreetingController {
 
     @GetMapping()
     public String greet(Locale locale) {
-        UserCreationRequest request = UserCreationRequest.builder().build();
         return messageSource.getMessage("greeting.message", null, locale);
     }
 }

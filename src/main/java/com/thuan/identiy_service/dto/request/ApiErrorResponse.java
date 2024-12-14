@@ -14,10 +14,10 @@ import java.util.List;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiErrorResponse {
-    private int status;
-    private List<FieldError> messages;
-    private String path;
-    private String timestamp;
+    private final int status;
+    private final List<FieldError> messages;
+    private final String path;
+    private final String timestamp;
     public ApiErrorResponse(int status, List<FieldError> messages, String path) {
         this.status = status;
         this.messages = messages;
