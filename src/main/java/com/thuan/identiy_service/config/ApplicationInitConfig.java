@@ -25,7 +25,7 @@ public class ApplicationInitConfig {
             if (!userRepository.existsByUsername("admin")) {
                 User user = User.builder()
                         .username("admin")
-                        .roles(Set.of(Role.ADMIN.name()))
+                        //.roles(Set.of(Role.ADMIN.name()))
                         .firstName("admin")
                         .lastName("admin")
                         .password(passwordEncoder.encode("password"))

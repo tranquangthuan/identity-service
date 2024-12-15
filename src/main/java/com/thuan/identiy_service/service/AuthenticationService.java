@@ -104,6 +104,6 @@ public class AuthenticationService {
         if (user.getRoles().isEmpty()) {
             return "";
         }
-        return String.join(" ", user.getRoles());
+        return String.join(" ", user.getRoles().stream().map(r -> r.getName()).toList());
     }
 }

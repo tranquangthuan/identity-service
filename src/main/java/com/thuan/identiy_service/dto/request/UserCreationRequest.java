@@ -1,5 +1,6 @@
 package com.thuan.identiy_service.dto.request;
 
+import com.thuan.identiy_service.validation.DobConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,5 +24,7 @@ public class UserCreationRequest {
     private String password;
     String firstName;
     String lastName;
+
+    @DobConstraint(min = 10, message = "{dob.min}")
     LocalDate dob;
 }
