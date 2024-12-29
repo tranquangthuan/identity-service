@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -23,8 +23,8 @@ import javax.crypto.spec.SecretKeySpec;
 //@EnableMethodSecurity
 public class SecurityConfig {
 
-    final String[] POST_ALLOW = {"/users", "/auth/token", "/auth/introspect"};
-    final String[] GET_ALLOW = {"/greeting"};
+    final String[] POST_ALLOW = {"/users", "/auth/token", "/auth/introspect", "/swagger-ui/**", "/v3/api-docs/**"};
+    final String[] GET_ALLOW = {"/greeting", "/swagger-ui/**", "/v3/api-docs/**"};
 
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -62,5 +62,10 @@ public class SecurityConfig {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return converter;
+    }
+
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(null)  // Cung cấp UserDetailsService
+                .passwordEncoder(null);           // Cung cấp PasswordEncoder
     }
 }
